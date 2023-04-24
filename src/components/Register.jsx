@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Form, FormControl, FormGroup, FormLabel } from 'react-bootstrap';
 import {createUserWithEmailAndPassword, getAuth} from 'firebase/auth'
 import app from '../firebase/firebase.config';
+import { Link } from 'react-router-dom';
 
 const auth = getAuth(app)
 
@@ -15,8 +16,7 @@ const Register = () => {
         e.preventDefault()
 
 
-        setSuccess('')
-        setError('')
+      
         // collect from data
         const email = e.target.email.value;
         const password = e.target.password.value;
@@ -24,6 +24,9 @@ const Register = () => {
 
         console.log(email, password)
 
+
+        setSuccess('')
+        setError('')
         // validation
         if(!/(?=.*[A-Z].*[A-Z])/.test(password)){
          setError('Password must be at least two capital letter')
@@ -32,6 +35,10 @@ const Register = () => {
         else if(!/(?=.*[0-9])/.test(password)){
             setError('Paaword must be at least 1 number')
             return
+        }
+        else if(!/(?=.*[!@#$%&*])/.test([password])){
+          setError('Password must be one special character')
+          return;
         }
         else if(password.length < 6){
             setError('Password must be minimym 6 charachter')
@@ -69,6 +76,7 @@ const Register = () => {
           <FormLabel>Confirm Password</FormLabel>
           <FormControl type="password" name='confirmPass' placeholder="Password" required/>
         </FormGroup>
+        <p>Already have an account? please <Link to='/login'>Login</Link></p>
         <button className="btn btn-primary">Register</button>
       <p className='text-danger'>{error}</p>
       <p className='text-success'>{success}</p>
